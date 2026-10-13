@@ -129,6 +129,28 @@ function renderApp() {
     document.querySelector("#completed-count").textContent = completedCount;
     document.querySelector("#overdue-count").textContent = overdueCount;
 
+    
+    // Calculate the project's completion percentage.
+    const progressPercentage = totalCount === 0
+        ? 0
+        : Math.round((completedCount / totalCount) * 100);
+
+    // Update the progress bar.
+    const progressFill = document.querySelector("#progress-fill");
+    const progressTrack = document.querySelector("#progress-track");
+
+    progressFill.style.width = `${progressPercentage}%`;
+    progressTrack.setAttribute(
+        "aria-valuenow",
+        progressPercentage
+    );
+
+    document.querySelector("#progress-percentage").textContent =
+        `${progressPercentage}%`;
+
+    document.querySelector("#progress-text").textContent =
+        `${completedCount} of ${totalCount} tasks completed`;
+
 
     
     // Make a separate list so the original todo order stays unchanged.
