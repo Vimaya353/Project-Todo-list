@@ -396,3 +396,52 @@ body {
     font: inherit;
 }
 
+
+/* Dashboard summary */
+.dashboard {
+    margin-bottom: 28px;
+}
+
+.dashboard > h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.summary-card {
+    padding: 18px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7ef;
+    border-radius: 12px;
+}
+
+.summary-card p {
+    margin: 0 0 12px;
+    color: #777b8c;
+    font-size: 14px;
+}
+
+.summary-card h3 {
+    margin: 0;
+    font-size: 28px;
+    color: #25283d;
+}
+
+@media (max-width: 800px) {
+    .summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 400px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+}
+

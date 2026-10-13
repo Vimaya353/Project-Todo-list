@@ -95,6 +95,42 @@ function renderApp() {
     const selectedProject = getProject(selectedProjectId);
 
     
+    // Calculate the summary for the selected project.
+    const allTodos = selectedProject
+        ? selectedProject.todos
+        : [];
+
+    const totalCount = allTodos.length;
+
+    const completedCount = allTodos.filter(
+        (todo) => todo.completed
+    ).length;
+
+    const pendingCount = totalCount - completedCount;
+
+    // Use today's date in the browser's local time.
+    const today = new Date();
+    const todayString = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, "0"),
+        String(today.getDate()).padStart(2, "0"),
+    ].join("-");
+
+    const overdueCount = allTodos.filter(
+        (todo) =>
+            !todo.completed &&
+            todo.dueDate &&
+            todo.dueDate < todayString
+    ).length;
+
+    // Display the calculated numbers.
+    document.querySelector("#total-count").textContent = totalCount;
+    document.querySelector("#pending-count").textContent = pendingCount;
+    document.querySelector("#completed-count").textContent = completedCount;
+    document.querySelector("#overdue-count").textContent = overdueCount;
+
+
+    
     // Make a separate list so the original todo order stays unchanged.
     let visibleTodos = selectedProject
         ? [...selectedProject.todos]
