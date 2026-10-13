@@ -4,37 +4,53 @@ import "./style.css";
 import {
     initializeProjects,
     getProjects,
+    getProject,
     addProject,
     addTodo,
+    deleteTodo,
+    toggleTodoComplete,
 } from "./app.js";
 
-// Load saved data or create the default project.
+import { renderProjects, renderTodos } from "./dom.js";
+
+// The project currently selected by the user.
+let selectedProjectId = null;
+
+// Draw the projects and todos on the page.
+function renderApp() {
+    const projects = getProjects();
+
+    // Select the first project if the selected one no longer exists.
+    if (!projects.some((project) => project.id === selectedProjectId)) {
+        selectedProjectId = projects[0]?.id ?? null;
+    }
+
+    renderProjects(
+        projects,
+        selectedProjectId,
+        (projectId) => {
+            selectedProjectId = projectId;
+            renderApp();
+        }
+    );
+
+    const selectedProject = getProject(selectedProjectId);
+
+    renderTodos(
+        selectedProject,
+        (todoId) => {
+            toggleTodoComplete(selectedProjectId, todoId);
+            renderApp();
+        },
+        (todoId) => {
+            deleteTodo(selectedProjectId, todoId);
+            renderApp();
+        }
+    );
+}
+
+// Load the saved data or create the default project.
 initializeProjects();
 
-console.log("Projects loaded:", getProjects());
-
-// Create sample data only if the default project is empty.
-const defaultProject = getProjects().find(
-    (project) => project.name === "Default"
-);
-
-if (defaultProject && defaultProject.todos.length === 0) {
-    addTodo(defaultProject.id, {
-        title: "Finish assignment",
-        description: "Complete the Todo List project",
-        dueDate: "2026-10-20",
-        priority: "high",
-    });
-}
-
-if (!getProjects().some((project) => project.name === "University")) {
-    addProject("University");
-}
-
-console.log("Current projects:", getProjects());
-
-const app = document.querySelector("#app");
-const heading = document.createElement("h1");
-
-heading.textContent = "Todo List";
-app.appendChild(heading);
+// Show the application.
+renderApp();
