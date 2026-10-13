@@ -6,47 +6,35 @@ import {
     getProjects,
     addProject,
     addTodo,
-    deleteTodo,
-    toggleTodoComplete,
 } from "./app.js";
 
-// Create the default project.
+// Load saved data or create the default project.
 initializeProjects();
 
-// Get the default project.
-const defaultProject = getProjects()[0];
+console.log("Projects loaded:", getProjects());
 
-console.log("Initial projects:", getProjects());
+// Create sample data only if the default project is empty.
+const defaultProject = getProjects().find(
+    (project) => project.name === "Default"
+);
 
-// Add a todo.
-const todo = addTodo(defaultProject.id, {
-    title: "Finish assignment",
-    description: "Complete the Todo List project",
-    dueDate: "2026-10-20",
-    priority: "high",
-});
+if (defaultProject && defaultProject.todos.length === 0) {
+    addTodo(defaultProject.id, {
+        title: "Finish assignment",
+        description: "Complete the Todo List project",
+        dueDate: "2026-10-20",
+        priority: "high",
+    });
+}
 
-console.log("After adding a todo:", getProjects());
+if (!getProjects().some((project) => project.name === "University")) {
+    addProject("University");
+}
 
-// Mark the todo complete.
-toggleTodoComplete(defaultProject.id, todo.id);
+console.log("Current projects:", getProjects());
 
-console.log("After completing the todo:", getProjects());
-
-// Create another project.
-addProject("University");
-
-console.log("After adding a project:", getProjects());
-
-// Delete the todo.
-deleteTodo(defaultProject.id, todo.id);
-
-console.log("After deleting the todo:", getProjects());
-
-// Display a heading on the page.
 const app = document.querySelector("#app");
-
 const heading = document.createElement("h1");
-heading.textContent = "Todo List";
 
+heading.textContent = "Todo List";
 app.appendChild(heading);
