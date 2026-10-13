@@ -9,6 +9,7 @@ import {
     addTodo,
     deleteTodo,
     toggleTodoComplete,
+    updateTodo,
 } from "./app.js";
 
 import { renderProjects, renderTodos } from "./dom.js";
@@ -66,6 +67,15 @@ function renderApp() {
         },
         (todoId) => {
             deleteTodo(selectedProjectId, todoId);
+            renderApp();
+        },
+        (todoId, updatedDetails) => {
+            updateTodo(
+                selectedProjectId,
+                todoId,
+                updatedDetails
+            );
+
             renderApp();
         }
     );

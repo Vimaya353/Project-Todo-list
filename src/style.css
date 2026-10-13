@@ -260,3 +260,75 @@ body {
     display: none !important;
 }
 
+
+/* Edit todo details */
+.todo-edit-section {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.todo-edit-form {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7ef;
+    border-radius: 10px;
+}
+
+.edit-field {
+    display: grid;
+    gap: 6px;
+}
+
+.edit-field label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.edit-field input,
+.edit-field textarea,
+.edit-field select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d6d8e2;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.edit-field textarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+.edit-button,
+.save-edit-button,
+.cancel-edit-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.edit-button,
+.save-edit-button {
+    background-color: #5558d9;
+    color: white;
+}
+
+.cancel-edit-button {
+    background-color: #eeeeF5;
+    color: #25283d;
+}
+
+.todo-edit-form button:hover,
+.edit-button:hover {
+    opacity: 0.85;
+}
+
+@media (max-width: 650px) {
+    .todo-edit-section {
+        width: 100%;
+    }
+}
+

@@ -11,6 +11,43 @@ function createElement(tag, className, text = "") {
     return element;
 }
 
+// Creates a label and input field for the edit form.
+function createInputField(labelText, name, value, type = "text") {
+    const wrapper = createElement("div", "edit-field");
+    const label = createElement("label", "", labelText);
+    const input = document.createElement("input");
+
+    input.type = type;
+    input.name = name;
+    input.value = value ?? "";
+    input.required = true;
+
+    label.htmlFor = `edit-${name}`;
+    input.id = `edit-${name}`;
+
+    wrapper.append(label, input);
+
+    return wrapper;
+}
+
+// Creates a label and textarea for longer text.
+function createTextareaField(labelText, name, value) {
+    const wrapper = createElement("div", "edit-field");
+    const label = createElement("label", "", labelText);
+    const textarea = document.createElement("textarea");
+
+    textarea.name = name;
+    textarea.value = value ?? "";
+    textarea.required = name !== "notes";
+
+    label.htmlFor = `edit-${name}`;
+    textarea.id = `edit-${name}`;
+
+    wrapper.append(label, textarea);
+
+    return wrapper;
+}
+
 function renderProjects(projects, selectedProjectId, onSelectProject) {
     const projectList = document.querySelector("#project-list");
     projectList.replaceChildren();
@@ -21,6 +58,8 @@ function renderProjects(projects, selectedProjectId, onSelectProject) {
             "project-button",
             project.name
         );
+
+        button.type = "button";
 
         if (project.id === selectedProjectId) {
             button.classList.add("active");
@@ -34,7 +73,12 @@ function renderProjects(projects, selectedProjectId, onSelectProject) {
     });
 }
 
-function renderTodos(project, onToggleComplete, onDeleteTodo) {
+function renderTodos(
+    project,
+    onToggleComplete,
+    onDeleteTodo,
+    onUpdateTodo
+) {
     const todoList = document.querySelector("#todo-list");
     const projectTitle = document.querySelector("#project-title");
 
@@ -88,6 +132,7 @@ function renderTodos(project, onToggleComplete, onDeleteTodo) {
 
         const actions = createElement("div", "todo-actions");
 
+        // Checkbox for marking a todo as complete.
         const completeLabel = createElement(
             "label",
             "complete-label",
@@ -104,6 +149,119 @@ function renderTodos(project, onToggleComplete, onDeleteTodo) {
 
         completeLabel.prepend(checkbox);
 
+        // Button for opening the edit form.
+        const editButton = createElement(
+            "button",
+            "edit-button",
+            "Details / Edit"
+        );
+
+        editButton.type = "button";
+
+        // The extra details are hidden when the card first appears.
+        const editSection = createElement("section", "todo-edit-section");
+        editSection.classList.add("hidden");
+
+        editButton.addEventListener("click", () => {
+            editSection.classList.toggle("hidden");
+
+            editButton.textContent = editSection.classList.contains("hidden")
+                ? "Details / Edit"
+                : "Hide Details";
+        });
+
+        // Build the edit form.
+        const editForm = document.createElement("form");
+        editForm.className = "todo-edit-form";
+
+        editForm.append(
+            createInputField("Title", "title", todo.title),
+            createTextareaField(
+                "Description",
+                "description",
+                todo.description
+            ),
+            createInputField(
+                "Due date",
+                "dueDate",
+                todo.dueDate,
+                "date"
+            )
+        );
+
+        const priorityWrapper = createElement("div", "edit-field");
+        const priorityLabel = createElement(
+            "label",
+            "",
+            "Priority"
+        );
+
+        const prioritySelect = document.createElement("select");
+        prioritySelect.name = "priority";
+        prioritySelect.id = `edit-priority-${todo.id}`;
+        priorityLabel.htmlFor = prioritySelect.id;
+        prioritySelect.required = true;
+
+        ["low", "medium", "high"].forEach((level) => {
+            const option = document.createElement("option");
+            option.value = level;
+            option.textContent =
+                level.charAt(0).toUpperCase() + level.slice(1);
+
+            if (todo.priority === level) {
+                option.selected = true;
+            }
+
+            prioritySelect.appendChild(option);
+        });
+
+        priorityWrapper.append(priorityLabel, prioritySelect);
+
+        editForm.append(
+            priorityWrapper,
+            createTextareaField("Notes", "notes", todo.notes)
+        );
+
+        const saveButton = createElement(
+            "button",
+            "save-edit-button",
+            "Save Changes"
+        );
+        saveButton.type = "submit";
+
+        const cancelButton = createElement(
+            "button",
+            "cancel-edit-button",
+            "Cancel"
+        );
+        cancelButton.type = "button";
+
+        cancelButton.addEventListener("click", () => {
+            editSection.classList.add("hidden");
+            editButton.textContent = "Details / Edit";
+        });
+
+        editForm.append(saveButton, cancelButton);
+
+        editForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(editForm);
+
+            const updatedDetails = {
+                title: formData.get("title").trim(),
+                description: formData.get("description").trim(),
+                dueDate: formData.get("dueDate"),
+                priority: formData.get("priority"),
+                notes: formData.get("notes").trim(),
+            };
+
+            onUpdateTodo(todo.id, updatedDetails);
+        });
+
+        editSection.appendChild(editForm);
+
+        // Delete button.
         const deleteButton = createElement(
             "button",
             "delete-button",
@@ -117,9 +275,9 @@ function renderTodos(project, onToggleComplete, onDeleteTodo) {
         });
 
         details.append(title, description, dueDate, priority);
-        actions.append(completeLabel, deleteButton);
-        card.append(details, actions);
+        actions.append(completeLabel, editButton, deleteButton);
 
+        card.append(details, actions, editSection);
         todoList.appendChild(card);
     });
 }
