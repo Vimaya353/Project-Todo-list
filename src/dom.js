@@ -48,11 +48,19 @@ function createTextareaField(labelText, name, value) {
     return wrapper;
 }
 
-function renderProjects(projects, selectedProjectId, onSelectProject) {
+
+function renderProjects(
+    projects,
+    selectedProjectId,
+    onSelectProject,
+    onDeleteProject
+) {
     const projectList = document.querySelector("#project-list");
     projectList.replaceChildren();
 
     projects.forEach((project) => {
+        const projectRow = createElement("div", "project-row");
+
         const button = createElement(
             "button",
             "project-button",
@@ -69,7 +77,31 @@ function renderProjects(projects, selectedProjectId, onSelectProject) {
             onSelectProject(project.id);
         });
 
-        projectList.appendChild(button);
+        projectRow.appendChild(button);
+
+        // Add a delete button to every project except Default.
+        if (project.name !== "Default") {
+            const deleteButton = createElement(
+                "button",
+                "project-delete-button",
+                "×"
+            );
+
+            deleteButton.type = "button";
+            deleteButton.title = `Delete ${project.name}`;
+            deleteButton.setAttribute(
+                "aria-label",
+                `Delete ${project.name}`
+            );
+
+            deleteButton.addEventListener("click", () => {
+                onDeleteProject(project.id);
+            });
+
+            projectRow.appendChild(deleteButton);
+        }
+
+        projectList.appendChild(projectRow);
     });
 }
 

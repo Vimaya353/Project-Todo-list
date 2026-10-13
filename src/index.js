@@ -6,6 +6,7 @@ import {
     getProjects,
     getProject,
     addProject,
+    deleteProject,
     addTodo,
     deleteTodo,
     toggleTodoComplete,
@@ -44,18 +45,48 @@ function renderApp() {
         selectedProjectId = projects[0]?.id ?? null;
     }
 
+
     renderProjects(
         projects,
         selectedProjectId,
         (projectId) => {
             selectedProjectId = projectId;
-
-            // Close the todo form when changing projects.
             todoForm.classList.add("hidden");
+            renderApp();
+        },
+        (projectId) => {
+            const project = getProject(projectId);
 
+            if (!project || project.name === "Default") {
+                return;
+            }
+
+            const confirmed = confirm(
+                `Delete "${project.name}" and all its todos?`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            deleteProject(projectId);
+
+            // If we deleted the selected project, select Default.
+            if (selectedProjectId === projectId) {
+                const defaultProject = getProjects().find(
+                    (item) => item.name === "Default"
+                );
+
+                selectedProjectId = defaultProject
+                    ? defaultProject.id
+                    : getProjects()[0]?.id ?? null;
+            }
+
+            todoForm.classList.add("hidden");
             renderApp();
         }
     );
+
 
     const selectedProject = getProject(selectedProjectId);
 

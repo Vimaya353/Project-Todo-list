@@ -49,6 +49,33 @@ function addProject(name) {
     return project;
 }
 
+
+function deleteProject(projectId) {
+    // Find the project the user wants to delete.
+    const project = getProject(projectId);
+
+    // Do not delete a project that does not exist.
+    if (!project) {
+        return false;
+    }
+
+    // Protect the Default project.
+    if (project.name === "Default") {
+        return false;
+    }
+
+    // Remove the selected project from the projects array.
+    projects = projects.filter(
+        (item) => item.id !== projectId
+    );
+
+    // Save the updated project list.
+    saveData();
+
+    return true;
+}
+
+
 // Create and save a todo in the selected project.
 function addTodo(projectId, todoDetails) {
     const project = getProject(projectId);
@@ -137,6 +164,7 @@ export {
     getProjects,
     getProject,
     addProject,
+    deleteProject,
     addTodo,
     deleteTodo,
     toggleTodoComplete,

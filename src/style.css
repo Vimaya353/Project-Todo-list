@@ -332,3 +332,32 @@ body {
     }
 }
 
+
+/* Keep each project name and delete button on one row. */
+.project-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.project-row .project-button {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-delete-button {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffe8e8;
+    color: #b42323;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.project-delete-button:hover {
+    background-color: #ffd4d4;
+}
+
