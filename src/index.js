@@ -18,6 +18,10 @@ import { renderProjects, renderTodos } from "./dom.js";
 // Remember which project the user has selected.
 let selectedProjectId = null;
 
+const filterStatus = document.querySelector("#filter-status");
+const filterPriority = document.querySelector("#filter-priority");
+const sortTodos = document.querySelector("#sort-todos");
+
 // Find an HTML element using its ID.
 const projectForm = document.querySelector("#project-form");
 const todoForm = document.querySelector("#todo-form");
@@ -90,8 +94,64 @@ function renderApp() {
 
     const selectedProject = getProject(selectedProjectId);
 
+    
+    // Make a separate list so the original todo order stays unchanged.
+    let visibleTodos = selectedProject
+        ? [...selectedProject.todos]
+        : [];
+
+    // Filter by completion status.
+    if (filterStatus.value === "pending") {
+        visibleTodos = visibleTodos.filter(
+            (todo) => !todo.completed
+        );
+    } else if (filterStatus.value === "completed") {
+        visibleTodos = visibleTodos.filter(
+            (todo) => todo.completed
+        );
+    }
+
+    // Filter by priority.
+    if (filterPriority.value !== "all") {
+        visibleTodos = visibleTodos.filter(
+            (todo) => todo.priority === filterPriority.value
+        );
+    }
+
+    // Sort the visible todos.
+    if (sortTodos.value === "dueDate") {
+        visibleTodos.sort((a, b) => {
+            // Tasks without a due date go to the end.
+            if (!a.dueDate) return 1;
+            if (!b.dueDate) return -1;
+
+            return a.dueDate.localeCompare(b.dueDate);
+        });
+    } else if (sortTodos.value === "priority") {
+        const priorityOrder = {
+            high: 1,
+            medium: 2,
+            low: 3,
+        };
+
+        visibleTodos.sort(
+            (a, b) =>
+                priorityOrder[a.priority] - priorityOrder[b.priority]
+        );
+    } else if (sortTodos.value === "title") {
+        visibleTodos.sort((a, b) =>
+            a.title.localeCompare(b.title)
+        );
+    }
+
+    // Create a temporary project containing only the visible todos.
+    const displayedProject = selectedProject
+        ? { ...selectedProject, todos: visibleTodos }
+        : null;
+
+
     renderTodos(
-        selectedProject,
+        displayedProject,
         (todoId) => {
             toggleTodoComplete(selectedProjectId, todoId);
             renderApp();
@@ -193,6 +253,10 @@ todoForm.addEventListener("submit", (event) => {
 
     renderApp();
 });
+
+filterStatus.addEventListener("change", renderApp);
+filterPriority.addEventListener("change", renderApp);
+sortTodos.addEventListener("change", renderApp);
 
 // Load saved projects and display the app.
 initializeProjects();

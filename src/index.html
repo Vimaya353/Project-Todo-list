@@ -89,7 +89,40 @@
                 <button id="cancel-todo-button" type="button">Cancel</button>
             </form>
 
-            <div id="todo-list"></div>
+            
+        <div class="todo-controls">
+            <div class="control-field">
+                <label for="filter-status">Show</label>
+                <select id="filter-status">
+                    <option value="all">All tasks</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="control-field">
+                <label for="filter-priority">Priority</label>
+                <select id="filter-priority">
+                    <option value="all">All priorities</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+
+            <div class="control-field">
+                <label for="sort-todos">Sort by</label>
+                <select id="sort-todos">
+                    <option value="default">Default order</option>
+                    <option value="dueDate">Due date</option>
+                    <option value="priority">Priority</option>
+                    <option value="title">Title</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="todo-list"></div>
+
 
         </main>
     </div>
