@@ -180,3 +180,83 @@ body {
         flex-direction: column;
     }
 }
+
+
+/* Header containing the project title and Add Todo button */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.main-header h2 {
+    margin: 0;
+}
+
+/* General button styling */
+#add-project-button,
+#add-todo-button,
+#project-form button,
+#todo-form button {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #5558d9;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#add-project-button {
+    width: 100%;
+    margin-top: 12px;
+}
+
+#add-project-button:hover,
+#add-todo-button:hover,
+#project-form button:hover,
+#todo-form button:hover {
+    background-color: #4245bd;
+}
+
+/* Forms */
+#project-form,
+#todo-form {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    background-color: white;
+    border: 1px solid #e5e7ef;
+    border-radius: 12px;
+}
+
+#project-form input,
+#todo-form input,
+#todo-form textarea,
+#todo-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d6d8e2;
+    border-radius: 6px;
+    font: inherit;
+}
+
+#todo-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+#project-form label,
+#todo-form label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Hide forms until the user asks to open them */
+.hidden {
+    display: none !important;
+}
+
