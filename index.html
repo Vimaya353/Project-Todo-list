@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+<script defer src="/Project-Todo-list/main.js"></script></head>
+<body>
+    <div id="app">
+        <aside class="sidebar">
+
+            <h1>My Tasks</h1>
+
+            <button id="add-project-button" type="button">
+                + Add Project
+            </button>
+
+            <h2>Projects</h2>
+            <div id="project-list"></div>
+
+        </aside>
+
+        <main class="main-content">
+
+            
+            <section class="dashboard">
+                <h2>Task Overview</h2>
+
+                <div class="summary-cards">
+                    <article class="summary-card">
+                        <p>Total Tasks</p>
+                        <h3 id="total-count">0</h3>
+                    </article>
+
+                    <article class="summary-card">
+                        <p>Pending</p>
+                        <h3 id="pending-count">0</h3>
+                    </article>
+
+                    <article class="summary-card">
+                        <p>Completed</p>
+                        <h3 id="completed-count">0</h3>
+                    </article>
+
+                    <article class="summary-card">
+                        <p>Overdue</p>
+                        <h3 id="overdue-count">0</h3>
+                    </article>
+                </div>
+            </section>
+
+            
+            <section class="project-progress">
+                <div class="progress-heading">
+                    <h3>Project Progress</h3>
+                    <span id="progress-percentage">0%</span>
+                </div>
+
+                <div
+                    class="progress-track"
+                    role="progressbar"
+                    aria-label="Project completion"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    id="progress-track"
+                >
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+
+                <p id="progress-text">0 of 0 tasks completed</p>
+            </section>
+
+
+
+            <div class="main-header">
+                <h2 id="project-title">Todo List</h2>
+
+                <button id="add-todo-button" type="button">
+                    + Add Todo
+                </button>
+            </div>
+
+            <form id="project-form" class="hidden">
+                <label for="project-name">Project name</label>
+                <input
+                    id="project-name"
+                    name="projectName"
+                    type="text"
+                    placeholder="e.g. University"
+                    required
+                >
+
+                <button type="submit">Create Project</button>
+                <button id="cancel-project-button" type="button">Cancel</button>
+            </form>
+
+            <form id="todo-form" class="hidden">
+                <label for="todo-title">Title</label>
+                <input
+                    id="todo-title"
+                    name="title"
+                    type="text"
+                    placeholder="e.g. Finish assignment"
+                    required
+                >
+
+                <label for="todo-description">Description</label>
+                <textarea
+                    id="todo-description"
+                    name="description"
+                    placeholder="What needs to be done?"
+                    required
+                ></textarea>
+
+                <label for="todo-due-date">Due date</label>
+                <input
+                    id="todo-due-date"
+                    name="dueDate"
+                    type="date"
+                    required
+                >
+
+                <label for="todo-priority">Priority</label>
+                <select id="todo-priority" name="priority" required>
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+
+                <label for="todo-notes">Notes (optional)</label>
+                <textarea
+                    id="todo-notes"
+                    name="notes"
+                    placeholder="Additional notes..."
+                ></textarea>
+
+                <button type="submit">Save Todo</button>
+                <button id="cancel-todo-button" type="button">Cancel</button>
+            </form>
+
+            
+        <div class="todo-controls">
+            <div class="control-field">
+                <label for="filter-status">Show</label>
+                <select id="filter-status">
+                    <option value="all">All tasks</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="control-field">
+                <label for="filter-priority">Priority</label>
+                <select id="filter-priority">
+                    <option value="all">All priorities</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+
+            <div class="control-field">
+                <label for="sort-todos">Sort by</label>
+                <select id="sort-todos">
+                    <option value="default">Default order</option>
+                    <option value="dueDate">Due date</option>
+                    <option value="priority">Priority</option>
+                    <option value="title">Title</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="todo-list"></div>
+
+
+        </main>
+    </div>
+</body>
+</html>
