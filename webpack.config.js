@@ -9,6 +9,7 @@ module.exports = {
     output: {
         filename: "main.js",
         clean: true,
+        publicPath: "/Project-Todo-list/",
     },
 
     plugins: [
